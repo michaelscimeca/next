@@ -132,7 +132,7 @@ const Movie = ({ movie }) => {
             <ul className="cast-list">
               {movie.cast.map(cast => (
                 <li key={cast._key} className="cast-list-item">
-                  <Link href="/person/[id]" as={`/person/${cast.person._id}`}>
+                  <Link href="/person/[id]" as={`/person/${cast.person._id}`} legacyBehavior>
                     <a className="cast-list-link">
                       <span>
                         {cast.person.image && (
@@ -371,6 +371,7 @@ const Movie = ({ movie }) => {
 export const getStaticPaths = async () => {
   // Get the paths we want to pre-render based on persons
   const movies = await sanity.fetch(moviesQuery);
+  // console.log(movies)
   const paths = movies.map(movie => ({
     params: { id: movie._id }
   }));
@@ -383,6 +384,8 @@ export const getStaticPaths = async () => {
 // This function gets called at build time on server-side.
 export const getStaticProps = async ({ params }) => {
   const movie = await sanity.fetch(singleMovieQuery, { id: params.id });
+  console.log( params.id, movie)
+
   return { props: { movie } };
 };
 
